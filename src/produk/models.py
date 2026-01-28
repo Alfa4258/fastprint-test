@@ -13,5 +13,4 @@ class Produk(models.Model):
     harga = models.DecimalField(max_digits=12, decimal_places=0)
     kategori = models.ForeignKey(Kategori, on_delete=models.CASCADE, related_name='produk')
     status = models.ForeignKey(Status, on_delete=models.CASCADE, related_name='produk')
-
     def __str__(self): return self.nama_produk
