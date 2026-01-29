@@ -1,30 +1,58 @@
-<html>
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="dark">
+{% load humanize %}
 <head>
-    <title>Daftar Produk</title>        
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Daftar Produk</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
-<h1><a href="{% url 'add_produk' %}">Tambah Produk</a></h1>
-<table>
-    <tr>
-        <th>Nama Produk</th>
-        <th>Harga</th>
-        <th>Kategori</th>
-        <th>Status</th>
-        <th>Aksi</th> </tr>
-    </tr>
-    {% for item in data %}
-    <tr>
-        <td>{{ item.nama_produk }}</td>
-        <td>{{ item.harga }}</td>
-        <td>{{ item.kategori }}</td>
-        <td>{{ item.status }}</td>
-        <td>
-            <a href="{% url 'edit_produk' id=item.id %}">Edit</a>
-            <a href="{% url 'delete_produk' id=item.id %}" 
-                onclick="return confirm('Yakin ingin menghapus produk ini?')">
-                Hapus Produk
-            </a>
-        </td>
-    </tr>
-    {% endfor %}
-</table>    
+<body>
+    <div class="container mt-5">
+        {% if messages %}
+        {% for message in messages %}
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            {{ message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+        {% endfor %}
+        {% endif %}
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h1>Daftar Produk</h1>
+            <a href="{% url 'add_produk' %}" class="btn btn-primary">Tambah Produk</a>
+        </div>
+        <div class="table-responsive">
+        <table class="table table-bordered table-striped table-hover">
+            <thead class="table-dark">
+                <tr>
+                    <th>Nama Produk</th>
+                    <th class="text-nowrap">Harga</th>
+                    <th>Kategori</th>
+                    <th>Status</th>
+                    <th>Aksi</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in data %}
+                <tr>
+                    <td>{{ item.nama_produk }}</td>
+                    <td class="text-nowrap text-end">Rp {{ item.harga|floatformat:0|intcomma }}</td>
+                    <td class="text-nowrap">{{ item.kategori }}</td>
+                    <td><span class="badge bg-success">{{ item.status }}</span></td>
+                    <td class="text-nowrap">
+                        <a href="{% url 'edit_produk' id=item.id %}" class="btn btn-sm btn-warning">Edit</a>
+                        <form action="{% url 'delete_produk' id=item.id %}" method="POST" style="display:inline;"
+                              onsubmit="return confirm('Apakah Anda yakin ingin menghapus produk {{ item.nama_produk }}?');">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-sm btn-danger">Hapus</button>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
 </html>
