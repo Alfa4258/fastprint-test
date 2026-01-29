@@ -1,0 +1,30 @@
+<html>
+<head>
+    <title>Daftar Produk</title>        
+</head>
+<h1><a href="{% url 'add_produk' %}">Tambah Produk</a></h1>
+<table>
+    <tr>
+        <th>Nama Produk</th>
+        <th>Harga</th>
+        <th>Kategori</th>
+        <th>Status</th>
+        <th>Aksi</th> </tr>
+    </tr>
+    {% for item in data %}
+    <tr>
+        <td>{{ item.nama_produk }}</td>
+        <td>{{ item.harga }}</td>
+        <td>{{ item.kategori }}</td>
+        <td>{{ item.status }}</td>
+        <td>
+            <a href="{% url 'edit_produk' id=item.id %}">Edit</a>
+            <a href="{% url 'delete_produk' id=item.id %}" 
+                onclick="return confirm('Yakin ingin menghapus produk ini?')">
+                Hapus Produk
+            </a>
+        </td>
+    </tr>
+    {% endfor %}
+</table>    
+</html>
